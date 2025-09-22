@@ -2,9 +2,66 @@
 
 A Flutter plugin for integrating with POS kiosk sensors (SU/SI devices) via native Android SDKs.
 
+## 🚨 **REQUIRED SETUP FOR ANY PROJECT USING THIS PLUGIN**
+
+### **Step 1: Copy AAR Files**
+Copy the following AAR files to your project's `android/app/libs/` directory:
+
+```bash
+# Create libs directory in your Flutter project
+mkdir android/app/libs
+
+# Copy these AAR files from the plugin to your project:
+# - PosLibUsb-debug_1.0.16.aar
+# - PosLibUsb-release_1.0.16.aar  
+# - SuSDK-debug_2.1.7.aar
+# - SuSDK-release_2.1.7.aar
+# - SiSDK-debug_2.0.11.aar
+# - SiSDK-release_2.0.11.aar
+```
+
+### **Step 2: Configure Android Build**
+Add to your `android/app/build.gradle` (or `build.gradle.kts`):
+
+```kotlin
+android {
+    // ... your existing configuration
+    
+    packagingOptions {
+        pickFirst("**/libPosLibUsb.so")
+        pickFirst("lib/arm64-v8a/libPosLibUsb.so")
+        pickFirst("lib/armeabi-v7a/libPosLibUsb.so")
+        pickFirst("lib/x86/libPosLibUsb.so")
+        pickFirst("lib/x86_64/libPosLibUsb.so")
+    }
+}
+
+repositories {
+    flatDir {
+        dirs("libs")
+    }
+}
+
+dependencies {
+    // Required AAR dependencies
+    debugImplementation(files("libs/PosLibUsb-debug_1.0.16.aar"))
+    releaseImplementation(files("libs/PosLibUsb-release_1.0.16.aar"))
+    
+    debugImplementation(files("libs/SuSDK-debug_2.1.7.aar"))
+    releaseImplementation(files("libs/SuSDK-release_2.1.7.aar"))
+    
+    debugImplementation(files("libs/SiSDK-debug_2.0.11.aar"))
+    releaseImplementation(files("libs/SiSDK-release_2.0.11.aar"))
+}
+```
+
+⚠️ **Without these steps, your build will fail with dependency resolution errors!**
+
+---
+
 ## Features
 
-- ✅ **SU (Superior) sensor integration** - Distance measurement and proximity detection
+- ✅ **SU (Motion) sensor integration** - Distance measurement and proximity detection
 - ✅ **SI (Status Indicator) sensor integration** - LED control and status monitoring  
 - ✅ **Real-time sensor data streaming** - Reactive programming with Dart streams
 - ✅ **USB device management** - Automatic device detection and permission handling
@@ -15,7 +72,7 @@ A Flutter plugin for integrating with POS kiosk sensors (SU/SI devices) via nati
 
 This plugin integrates with the following native Android SDKs:
 - **PosLibUsb** v1.0.16 - USB communication library
-- **SuSDK** v2.1.7 - Superior sensor SDK  
+- **SuSDK** v2.1.7 - Motion sensor SDK  
 - **SiSDK** v2.0.11 - Status Indicator SDK
 
 ## Installation

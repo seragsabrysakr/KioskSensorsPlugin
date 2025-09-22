@@ -11,7 +11,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.NonNull
-import com.example.pos_base.SiUtils
+import com.example.kiosk_sensors_plugin.SiUtils
 import com.pos.poslibusb.*
 import com.pos.sisdk.SIFunctions
 import com.pos.susdk.SUFunctions

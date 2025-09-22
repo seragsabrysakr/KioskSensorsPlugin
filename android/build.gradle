@@ -48,7 +48,11 @@ android {
     }
 
     packagingOptions {
-        pickFirst 'lib/*/*.so'
+        pickFirst '**/libPosLibUsb.so'
+        pickFirst 'lib/arm64-v8a/libPosLibUsb.so'
+        pickFirst 'lib/armeabi-v7a/libPosLibUsb.so'
+        pickFirst 'lib/x86/libPosLibUsb.so'
+        pickFirst 'lib/x86_64/libPosLibUsb.so'
     }
 
     buildTypes {
@@ -77,22 +81,16 @@ android {
     }
 }
 
-repositories {
-    flatDir {
-        dirs 'src/main/libs'
-    }
-}
-
 dependencies {
-    // ✅ PosLibUsb (POS USB Library)
-    debugImplementation files('src/main/libs/PosLibUsb-debug_1.0.16.aar')
-    releaseImplementation files('src/main/libs/PosLibUsb-release_1.0.16.aar')
+    // ✅ PosLibUsb (POS USB Library) - using compileOnly to avoid AAR packaging issues
+    debugCompileOnly files('src/main/libs/PosLibUsb-debug_1.0.16.aar')
+    releaseCompileOnly files('src/main/libs/PosLibUsb-release_1.0.16.aar')
 
-    // ✅ SuSDK (Superior SDK)
-    debugImplementation files('src/main/libs/SuSDK-debug_2.1.7.aar')
-    releaseImplementation files('src/main/libs/SuSDK-release_2.1.7.aar')
+    // ✅ SuSDK (Motion SDK)
+    debugCompileOnly files('src/main/libs/SuSDK-debug_2.1.7.aar')
+    releaseCompileOnly files('src/main/libs/SuSDK-release_2.1.7.aar')
 
     // ✅ SiSDK (Status Indicator SDK)
-    debugImplementation files('src/main/libs/SiSDK-debug_2.0.11.aar')
-    releaseImplementation files('src/main/libs/SiSDK-release_2.0.11.aar')
+    debugCompileOnly files('src/main/libs/SiSDK-debug_2.0.11.aar')
+    releaseCompileOnly files('src/main/libs/SiSDK-release_2.0.11.aar')
 }
