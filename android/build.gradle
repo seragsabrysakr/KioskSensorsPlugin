@@ -1,0 +1,98 @@
+group = "com.example.kiosk_sensors_plugin"
+version = "1.0-SNAPSHOT"
+
+buildscript {
+    ext.kotlin_version = "2.1.0"
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.7.3")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+    namespace = "com.example.kiosk_sensors_plugin"
+
+    compileSdk = 35
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
+    }
+
+    defaultConfig {
+        minSdk = 23
+    }
+
+    packagingOptions {
+        pickFirst 'lib/*/*.so'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'consumer-rules.pro'
+        }
+    }
+
+    dependencies {
+        testImplementation("org.jetbrains.kotlin:kotlin-test")
+        testImplementation("org.mockito:mockito-core:5.0.0")
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+
+            testLogging {
+               events "passed", "skipped", "failed", "standardOut", "standardError"
+               outputs.upToDateWhen {false}
+               showStandardStreams = true
+            }
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'src/main/libs'
+    }
+}
+
+dependencies {
+    // ✅ PosLibUsb (POS USB Library)
+    debugImplementation files('src/main/libs/PosLibUsb-debug_1.0.16.aar')
+    releaseImplementation files('src/main/libs/PosLibUsb-release_1.0.16.aar')
+
+    // ✅ SuSDK (Superior SDK)
+    debugImplementation files('src/main/libs/SuSDK-debug_2.1.7.aar')
+    releaseImplementation files('src/main/libs/SuSDK-release_2.1.7.aar')
+
+    // ✅ SiSDK (Status Indicator SDK)
+    debugImplementation files('src/main/libs/SiSDK-debug_2.0.11.aar')
+    releaseImplementation files('src/main/libs/SiSDK-release_2.0.11.aar')
+}
